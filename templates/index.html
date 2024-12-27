@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>CSV to Word Cloud Generator</title>
+  <style>
+    body { font-family: Arial, sans-serif; text-align: center; padding-top: 50px; }
+    .container { width: 50%; margin: auto; }
+    input[type=file] { padding: 10px; }
+    input[type=submit] { padding: 10px 20px; }
+    .message { color: red; margin-top: 20px; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Upload CSV to Generate Word Cloud</h1>
+    <form method="post" enctype="multipart/form-data">
+      <input type="file" name="file" accept=".csv" required>
+      <br><br>
+      <input type="submit" value="Upload and Generate">
+    </form>
+    {% if message %}
+      <div class="message">{{ message }}</div>
+    {% endif %}
+  </div>
+</body>
+</html>

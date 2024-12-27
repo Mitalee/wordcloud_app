@@ -1,0 +1,22 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Your Word Cloud</title>
+  <style>
+    body { font-family: Arial, sans-serif; text-align: center; padding-top: 50px; }
+    .container { width: 80%; margin: auto; }
+    img { max-width: 100%; height: auto; }
+    a { display: inline-block; margin-top: 20px; padding: 10px 20px; background-color: #4CAF50; color: white; text-decoration: none; border-radius: 5px; }
+    a:hover { background-color: #45a049; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Your Word Cloud</h1>
+    <img src="{{ url_for('static_files', filename=image_file) }}" alt="Word Cloud">
+    <br><br>
+    <a href="{{ url_for('upload_file') }}">Generate Another Word Cloud</a>
+  </div>
+</body>
+</html>
