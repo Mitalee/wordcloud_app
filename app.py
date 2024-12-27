@@ -12,6 +12,16 @@ import matplotlib
 matplotlib.use('Agg')  # Use a non-GUI backend
 import matplotlib.pyplot as plt
 
+"""
+This is a simple Flask web application that allows users to upload a CSV file containing text data and generates a wordcloud.
+
+EXAMPLE CALL:
+word_freq = process_csv('uploads/sample.csv')
+generate_wordcloud(word_freq, 'static/wordcloud.png', top_n=10)
+"""
+
+
+
 
 # Initialize NLTK stopwords
 nltk.download('stopwords')
@@ -79,27 +89,33 @@ def process_csv(file_path, text_column='text'):
         print(f"Error processing CSV: {e}")
         return None
 
-def generate_wordcloud(word_freq, output_path):
+def generate_wordcloud(word_freq, output_path, top_n=15):
     """
-    Generate a word cloud image from word frequencies.
+    Generate a word cloud image from the top N word frequencies, excluding words with frequency 1.
 
     Parameters:
     - word_freq: A dictionary with words as keys and their frequencies as values.
     - output_path: Path to save the generated word cloud image.
+    - top_n: Number of top words to include in the word cloud (default is 15).
 
     Returns:
     - output_path: Path where the image is saved.
     """
     try:
-        wordcloud = WordCloud(width=800, height=400, background_color='white').generate_from_frequencies(word_freq)
-        print(wordcloud)
-        # Display the generated image
+        # Filter out words with frequency 1
+        filtered_words = {word: freq for word, freq in word_freq.items() if freq > 1}
+
+        # Get the top N most common words from the filtered list
+        top_words = dict(Counter(filtered_words).most_common(top_n))
+
+        # Generate word cloud with the top words
+        wordcloud = WordCloud(width=800, height=400, background_color='white').generate_from_frequencies(top_words)
+
         plt.figure(figsize=(15, 7.5))
         plt.imshow(wordcloud, interpolation='bilinear')
         plt.axis('off')
         plt.tight_layout(pad=0)
 
-        # Save the image to the static folder
         plt.savefig(output_path)
         plt.close()
 
@@ -107,6 +123,7 @@ def generate_wordcloud(word_freq, output_path):
     except Exception as e:
         print(f"Error generating word cloud: {e}")
         return None
+
 
 @app.route('/', methods=['GET', 'POST'])
 def upload_file():
